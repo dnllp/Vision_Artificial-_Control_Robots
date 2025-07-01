@@ -12,15 +12,16 @@ def clic_and_crop(event,x,y,flags,param):
         refPt.append((x,y))
         cropping = False
         cv2.rectangle(image,refPt[0],refPt[1],(0,255,0),2)
-        cv2.imshow("Imagen",image)
+        cv2.imshow("Image",image)
 
 path = os.getcwd()
 print(path)
+numImg = 0
 
-originalImg = "/originalImg"
-cropImg = "/cropImg"
+originalImg = "\\originalImg"
+cropImg = "\\cropImg"
 
-filenames = glob.glob(path+originalImg+"/*.jpg")
+filenames = glob.glob(path+originalImg+"\\*.jpg")
 
 image, clone = None,None
 
@@ -28,13 +29,13 @@ for filename in filenames:
     refPt=[]
     cropping = False
     cv2.namedWindow("Image")
-    cv2.setMouseCallback("image",clic_and_crop)
+    cv2.setMouseCallback("Image",clic_and_crop)
     
     image = cv2.imread(filename)
     clone = image.copy()
     
     while True:
-        cv2.imshow("image",image)
+        cv2.imshow("Image",image)
         key = cv2.waitKey(1) & 0xff
         
         if key == ord("r"):
@@ -43,11 +44,12 @@ for filename in filenames:
         elif key == ord("c"):
             break
     if len (refPt) == 2:
-        roi = clone[refPt[0][1]:refPt[1][1],refPt[0][0:refPt[1][0]]]
+        roi = clone[refPt[0][1]:refPt[1][1],refPt[0][0]:refPt[1][0]]
+        print(refPt)
         cv2.imshow("ROI",roi)
-        cv2.imwrite(os.getcwd()+cropImg+"/crop("+str(numImg)+").jpg",roi)
+        cv2.imwrite(os.getcwd()+cropImg+"\\crop("+str(numImg)+").jpg",roi)
     else:
-        cv2.imwrite(os.getcwd()+cropImg+"/crop("+str(numImg)+").jpg",image)
+        cv2.imwrite(os.getcwd()+cropImg+"\\crop("+str(numImg)+").jpg",image)
     
     numImg = numImg +1
     cv2.waitKey(0)
